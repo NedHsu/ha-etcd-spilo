@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.6
+    container_name: etcd
+    command: >
+      /usr/local/bin/etcd
+      --name etcd0
+      --data-dir /etcd-data
+      --advertise-client-urls http://0.0.0.0:2379
+      --listen-client-urls http://0.0.0.0:2379
+    ports:
+      - "2379:2379"
+    volumes:
+      - etcd-data:/etcd-data
+
+  spilo-node1:
+    image: registry.opensource.zalan.do/acid/spilo-14:2.1-p6
+    container_name: spilo-node1
+    environment:
+      CLUSTER_NAME: spilo-cluster
+      SCOPE: spilo-cluster
+      ETCD_HOST: etcd:2379
+      PATRONI_NAME: spilo-node1
+      PATRONI_RESTAPI_CONNECT_ADDRESS: spilo-node1:8008
+      PATRONI_POSTGRESQL_CONNECT_ADDRESS: spilo-node1:5432
+      PATRONI_KUBERNETES: "false"
+      PATRONI_INITIALIZATION: '{"username": "admin", "password": "password"}'
+      PATRONI_SUPERUSER_PASSWORD: super_password
+      PATRONI_REPLICATION_PASSWORD: replication_password
+
+      # 本地存儲相關配置
+      USE_WALG_BACKUP: "true"
+      WALG_FILE_PREFIX: "/backups/spilo"
+    depends_on:
+      - etcd
+    ports:
+      - "5433:5432"
+      - "8009:8008"
+    volumes:
+      - spilo-data-node1:/home/postgres/pgdata
+      - ./backups:/backups
+  spilo-node2:
+    image: registry.opensource.zalan.do/acid/spilo-14:2.1-p6
+    container_name: spilo-node2
+    environment:
+      CLUSTER_NAME: spilo-cluster
+      SCOPE: spilo-cluster
+      ETCD_HOST: etcd:2379
+      PATRONI_NAME: spilo-node2
+      PATRONI_RESTAPI_CONNECT_ADDRESS: spilo-node2:8008
+      PATRONI_POSTGRESQL_CONNECT_ADDRESS: spilo-node2:5432
+      PATRONI_KUBERNETES: "false"
+      PATRONI_INITIALIZATION: '{"username": "admin", "password": "password"}'
+      PATRONI_SUPERUSER_PASSWORD: super_password
+      PATRONI_REPLICATION_PASSWORD: replication_password
+
+      # 本地存儲相關配置
+      USE_WALG_BACKUP: "true"
+      WALG_FILE_PREFIX: "/backups/spilo"
+    depends_on:
+      - etcd
+    ports:
+      - "5434:5432"
+      - "8010:8008"
+    volumes:
+      - spilo-data-node2:/home/postgres/pgdata
+      - ./backups:/backups
+  spilo-node3:
+    image: registry.opensource.zalan.do/acid/spilo-14:2.1-p6
+    container_name: spilo-node3
+    environment:
+      CLUSTER_NAME: spilo-cluster
+      SCOPE: spilo-cluster
+      ETCD_HOST: etcd:2379
+      PATRONI_NAME: spilo-node3
+      PATRONI_RESTAPI_CONNECT_ADDRESS: spilo-node3:8008
+      PATRONI_POSTGRESQL_CONNECT_ADDRESS: spilo-node3:5432
+      PATRONI_KUBERNETES: "false"
+      PATRONI_INITIALIZATION: '{"username": "admin", "password": "password"}'
+      PATRONI_SUPERUSER_PASSWORD: super_password
+      PATRONI_REPLICATION_PASSWORD: replication_password
+
+      # 本地存儲相關配置
+      USE_WALG_BACKUP: "true"
+      WALG_FILE_PREFIX: "/backups/spilo"
+    depends_on:
+      - etcd
+    ports:
+      - "5435:5432"
+      - "8011:8008"
+    volumes:
+      - spilo-data-node3:/home/postgres/pgdata
+      - ./backups:/backups
+
+  haproxy:
+    image: haproxy:2.7
+    container_name: haproxy
+    depends_on:
+      - spilo-node1
+      - spilo-node2
+      - spilo-node3
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+
+volumes:
+  etcd-data:
+  spilo-data-node1:
+  spilo-data-node2:
+  spilo-data-node3:
