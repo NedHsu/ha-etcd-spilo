@@ -21,13 +21,13 @@ services:
     environment:
       CLUSTER_NAME: spilo-cluster
       SCOPE: spilo-cluster
-      PATRONI_NAME: spilo-node1
-      PATRONI_RESTAPI_CONNECT_ADDRESS: spilo-node1:8008
-      PATRONI_POSTGRESQL_CONNECT_ADDRESS: spilo-node1:5432
+      APIPORT: 8008
+      PGPORT: 5432
       PATRONI_KUBERNETES: "false"
-      PATRONI_INITIALIZATION: '{"username": "admin", "password": "password"}'
-      PATRONI_SUPERUSER_PASSWORD: super_password
-      PATRONI_REPLICATION_PASSWORD: replication_password
+      PGUSER_SUPERUSER: postgres
+      PGPASSWORD_SUPERUSER: ${POSTGRES_PASSWORD}
+      PGUSER_STANDBY: standby
+      PGPASSWORD_STANDBY: ${PGPASSWORD_STANDBY}
 
       # 本地存儲相關配置
       USE_WALG_BACKUP: "true"
@@ -46,13 +46,13 @@ services:
     environment:
       CLUSTER_NAME: spilo-cluster
       SCOPE: spilo-cluster
-      PATRONI_NAME: spilo-node2
-      PATRONI_RESTAPI_CONNECT_ADDRESS: spilo-node2:8008
-      PATRONI_POSTGRESQL_CONNECT_ADDRESS: spilo-node2:5432
+      APIPORT: 8008
+      PGPORT: 5432
       PATRONI_KUBERNETES: "false"
-      PATRONI_INITIALIZATION: '{"username": "admin", "password": "password"}'
-      PATRONI_SUPERUSER_PASSWORD: super_password
-      PATRONI_REPLICATION_PASSWORD: replication_password
+      PGUSER_SUPERUSER: postgres
+      PGPASSWORD_SUPERUSER: ${POSTGRES_PASSWORD}
+      PGUSER_STANDBY: standby
+      PGPASSWORD_STANDBY: ${PGPASSWORD_STANDBY}
 
       # 本地存儲相關配置
       USE_WALG_BACKUP: "true"
@@ -71,13 +71,13 @@ services:
     environment:
       CLUSTER_NAME: spilo-cluster
       SCOPE: spilo-cluster
-      PATRONI_NAME: spilo-node3
-      PATRONI_RESTAPI_CONNECT_ADDRESS: spilo-node3:8008
-      PATRONI_POSTGRESQL_CONNECT_ADDRESS: spilo-node3:5432
+      APIPORT: 8008
+      PGPORT: 5432
       PATRONI_KUBERNETES: "false"
-      PATRONI_INITIALIZATION: '{"username": "admin", "password": "password"}'
-      PATRONI_SUPERUSER_PASSWORD: super_password
-      PATRONI_REPLICATION_PASSWORD: replication_password
+      PGUSER_SUPERUSER: postgres
+      PGPASSWORD_SUPERUSER: ${POSTGRES_PASSWORD}
+      PGUSER_STANDBY: standby
+      PGPASSWORD_STANDBY: ${PGPASSWORD_STANDBY}
 
       # 本地存儲相關配置
       USE_WALG_BACKUP: "true"
@@ -112,6 +112,7 @@ services:
       - PGADMIN_SERVER_JSON_FILE=/pgadmin4/servers.json
       - PGADMIN_CONFIG_SERVER_MODE=False
       - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5050:80"
     volumes:
