@@ -30,6 +30,17 @@ services:
       PGUSER_STANDBY: standby
       PGPASSWORD_STANDBY: ${PGPASSWORD_STANDBY}
 
+      # PostgreSQL 參數配置
+      PATRONI_POSTGRESQL_PARAMETERS: >
+        max_connections=100
+        shared_buffers=128MB
+        synchronous_commit=on
+        synchronous_standby_names='FIRST 2 (spilo-node2,spilo-node3)'
+        wal_level=replica
+        max_wal_senders=10
+        max_replication_slots=10
+        hot_standby=on
+
       # 本地存儲相關配置
       USE_WALG_BACKUP: "true"
       WALG_FILE_PREFIX: "/backups/spilo"
@@ -43,6 +54,7 @@ services:
     volumes:
       - spilo-data-node1:/home/postgres/pgdata
       - ./backups:/backups
+
   spilo-node2:
     image: registry.opensource.zalan.do/acid/spilo-14:latest
     container_name: spilo-node2
@@ -55,6 +67,17 @@ services:
       PGPASSWORD_SUPERUSER: ${POSTGRES_PASSWORD}
       PGUSER_STANDBY: standby
       PGPASSWORD_STANDBY: ${PGPASSWORD_STANDBY}
+
+      # PostgreSQL 參數配置
+      PATRONI_POSTGRESQL_PARAMETERS: >
+        max_connections=100
+        shared_buffers=128MB
+        synchronous_commit=on
+        synchronous_standby_names='FIRST 2 (spilo-node1,spilo-node3)'
+        wal_level=replica
+        max_wal_senders=10
+        max_replication_slots=10
+        hot_standby=on
 
       # 本地存儲相關配置
       USE_WALG_BACKUP: "true"
@@ -69,6 +92,7 @@ services:
     volumes:
       - spilo-data-node2:/home/postgres/pgdata
       - ./backups:/backups
+
   spilo-node3:
     image: registry.opensource.zalan.do/acid/spilo-14:latest
     container_name: spilo-node3
@@ -81,6 +105,17 @@ services:
       PGPASSWORD_SUPERUSER: ${POSTGRES_PASSWORD}
       PGUSER_STANDBY: standby
       PGPASSWORD_STANDBY: ${PGPASSWORD_STANDBY}
+
+      # PostgreSQL 參數配置
+      PATRONI_POSTGRESQL_PARAMETERS: >
+        max_connections=100
+        shared_buffers=128MB
+        synchronous_commit=on
+        synchronous_standby_names='FIRST 2 (spilo-node1,spilo-node2)'
+        wal_level=replica
+        max_wal_senders=10
+        max_replication_slots=10
+        hot_standby=on
 
       # 本地存儲相關配置
       USE_WALG_BACKUP: "true"

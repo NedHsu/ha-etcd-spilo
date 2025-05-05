@@ -20,6 +20,12 @@ bootstrap:
       parameters:
         max_connections: 100
         shared_buffers: 128MB
+        synchronous_commit: on
+        synchronous_standby_names: 'FIRST 2 (spilo-node2,spilo-node3)'
+        wal_level: replica
+        max_wal_senders: 10
+        max_replication_slots: 10
+        hot_standby: on
   initdb:
     - encoding: UTF8
     - locale: en_US.UTF-8
