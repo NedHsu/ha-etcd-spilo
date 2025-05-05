@@ -131,3 +131,4 @@ volumes:
   spilo-data-node1:
   spilo-data-node2:
   spilo-data-node3:
+  pgadmin-data:
