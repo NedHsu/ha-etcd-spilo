@@ -18,14 +18,13 @@ services:
       - etcd-data:/etcd-data
 
   spilo-node1:
-    image: registry.opensource.zalan.do/acid/spilo-14:2.1-p6
+    image: registry.opensource.zalan.do/acid/spilo-14:latest
     container_name: spilo-node1
     environment:
       CLUSTER_NAME: spilo-cluster
       SCOPE: spilo-cluster
       APIPORT: 8008
       PGPORT: 5432
-      PATRONI_KUBERNETES: "false"
       PGUSER_SUPERUSER: postgres
       PGPASSWORD_SUPERUSER: ${POSTGRES_PASSWORD}
       PGUSER_STANDBY: standby
@@ -45,14 +44,13 @@ services:
       - spilo-data-node1:/home/postgres/pgdata
       - ./backups:/backups
   spilo-node2:
-    image: registry.opensource.zalan.do/acid/spilo-14:2.1-p6
+    image: registry.opensource.zalan.do/acid/spilo-14:latest
     container_name: spilo-node2
     environment:
       CLUSTER_NAME: spilo-cluster
       SCOPE: spilo-cluster
       APIPORT: 8008
       PGPORT: 5432
-      PATRONI_KUBERNETES: "false"
       PGUSER_SUPERUSER: postgres
       PGPASSWORD_SUPERUSER: ${POSTGRES_PASSWORD}
       PGUSER_STANDBY: standby
@@ -72,14 +70,13 @@ services:
       - spilo-data-node2:/home/postgres/pgdata
       - ./backups:/backups
   spilo-node3:
-    image: registry.opensource.zalan.do/acid/spilo-14:2.1-p6
+    image: registry.opensource.zalan.do/acid/spilo-14:latest
     container_name: spilo-node3
     environment:
       CLUSTER_NAME: spilo-cluster
       SCOPE: spilo-cluster
       APIPORT: 8008
       PGPORT: 5432
-      PATRONI_KUBERNETES: "false"
       PGUSER_SUPERUSER: postgres
       PGPASSWORD_SUPERUSER: ${POSTGRES_PASSWORD}
       PGUSER_STANDBY: standby
