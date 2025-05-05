@@ -1,7 +1,7 @@
 {
     "Servers": {
         "1": {
-            "Name": "Spilo Cluster (HAProxy)",
+            "Name": "Spilo Cluster (HAProxy Write)",
             "Group": "Spilo",
             "Host": "haproxy",
             "Port": 5000,
@@ -11,6 +11,16 @@
             "SSLMode": "prefer"
         },
         "2": {
+            "Name": "Spilo Cluster (HAProxy Read)",
+            "Group": "Spilo",
+            "Host": "haproxy",
+            "Port": 5001,
+            "MaintenanceDB": "postgres",
+            "Username": "postgres",
+            "Password": "${POSTGRES_PASSWORD}",
+            "SSLMode": "prefer"
+        },
+        "3": {
             "Name": "Spilo-1 (Primary)",
             "Group": "Spilo",
             "Host": "spilo-node1",
@@ -20,7 +30,7 @@
             "Password": "${POSTGRES_PASSWORD}",
             "SSLMode": "prefer"
         },
-        "3": {
+        "4": {
             "Name": "Spilo-2 (Replica)",
             "Group": "Spilo",
             "Host": "spilo-node2",
@@ -30,7 +40,7 @@
             "Password": "${POSTGRES_PASSWORD}",
             "SSLMode": "prefer"
         },
-        "4": {
+        "5": {
             "Name": "Spilo-3 (Replica)",
             "Group": "Spilo",
             "Host": "spilo-node3",
