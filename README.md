@@ -94,32 +94,6 @@ To restore from a backup:
 ## HAProxy Configuration
 The HAProxy configuration (`haproxy/haproxy.cfg`) routes requests to the PostgreSQL leader node. You can modify it to suit your requirements.
 
-### Default Configuration
-```haproxy
-global
-    log stdout format raw
-    maxconn 4096
-
-defaults
-    log global
-    mode tcp
-    retries 2
-    timeout connect 3000ms
-    timeout client 5000ms
-    timeout server 5000ms
-
-frontend pgsql_frontend
-    bind *:5000
-    default_backend pgsql_backend
-
-backend pgsql_backend
-    option httpchk OPTIONS /master
-    http-check expect status 200
-    server spilo-node1 spilo-node1:5432 check
-    server spilo-node2 spilo-node2:5432 check
-    server spilo-node3 spilo-node3:5432 check
-```
-
 ---
 
 ## Scaling the Cluster
