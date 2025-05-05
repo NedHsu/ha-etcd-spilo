@@ -12,6 +12,8 @@ services:
       --listen-client-urls http://0.0.0.0:2379
     ports:
       - "2379:2379"
+    networks:
+      - spilo-net
     volumes:
       - etcd-data:/etcd-data
 
@@ -37,6 +39,8 @@ services:
     ports:
       - "5433:5432"
       - "8009:8008"
+    networks:
+      - spilo-net
     volumes:
       - spilo-data-node1:/home/postgres/pgdata
       - ./backups:/backups
@@ -62,6 +66,8 @@ services:
     ports:
       - "5434:5432"
       - "8010:8008"
+    networks:
+      - spilo-net
     volumes:
       - spilo-data-node2:/home/postgres/pgdata
       - ./backups:/backups
@@ -87,6 +93,8 @@ services:
     ports:
       - "5435:5432"
       - "8011:8008"
+    networks:
+      - spilo-net
     volumes:
       - spilo-data-node3:/home/postgres/pgdata
       - ./backups:/backups
@@ -100,6 +108,8 @@ services:
       - spilo-node3
     ports:
       - "5000:5000"
+    networks:
+      - spilo-net
     volumes:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
 
@@ -115,6 +125,8 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5050:80"
+    networks:
+      - spilo-net
     volumes:
       - pgadmin-data:/var/lib/pgadmin
       - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
@@ -132,3 +144,7 @@ volumes:
   spilo-data-node2:
   spilo-data-node3:
   pgadmin-data:
+
+networks:
+  spilo-net:
+    driver: bridge
