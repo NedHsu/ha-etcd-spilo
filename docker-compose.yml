@@ -21,7 +21,6 @@ services:
     environment:
       CLUSTER_NAME: spilo-cluster
       SCOPE: spilo-cluster
-      ETCD_HOST: etcd:2379
       PATRONI_NAME: spilo-node1
       PATRONI_RESTAPI_CONNECT_ADDRESS: spilo-node1:8008
       PATRONI_POSTGRESQL_CONNECT_ADDRESS: spilo-node1:5432
@@ -47,7 +46,6 @@ services:
     environment:
       CLUSTER_NAME: spilo-cluster
       SCOPE: spilo-cluster
-      ETCD_HOST: etcd:2379
       PATRONI_NAME: spilo-node2
       PATRONI_RESTAPI_CONNECT_ADDRESS: spilo-node2:8008
       PATRONI_POSTGRESQL_CONNECT_ADDRESS: spilo-node2:5432
@@ -73,7 +71,6 @@ services:
     environment:
       CLUSTER_NAME: spilo-cluster
       SCOPE: spilo-cluster
-      ETCD_HOST: etcd:2379
       PATRONI_NAME: spilo-node3
       PATRONI_RESTAPI_CONNECT_ADDRESS: spilo-node3:8008
       PATRONI_POSTGRESQL_CONNECT_ADDRESS: spilo-node3:5432
@@ -105,6 +102,28 @@ services:
       - "5000:5000"
     volumes:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+      - PGADMIN_SERVER_JSON_FILE=/pgadmin4/servers.json
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
+      - ./pgadmin/entrypoint.sh:/entrypoint-custom.sh:ro
+    entrypoint: ["/bin/bash", "/entrypoint-custom.sh"]
+    depends_on:
+      - haproxy
+      - spilo-node1
+      - spilo-node2
+      - spilo-node3
 
 volumes:
   etcd-data:
