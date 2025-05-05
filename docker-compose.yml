@@ -111,6 +111,7 @@ services:
       - spilo-node3
     ports:
       - "5000:5000"
+      - "5001:5001"
     networks:
       - spilo-net
     volumes:
