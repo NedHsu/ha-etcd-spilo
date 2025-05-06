@@ -31,7 +31,18 @@ services:
       PGPASSWORD_STANDBY: ${PGPASSWORD_STANDBY}
 
       # 本地存儲相關配置
-      USE_WALG_BACKUP: "true"
+      WAL_RESTORE_TIMEOUT: 0
+      USE_WALG_BACKUP: true
+      USE_WALG_RESTORE: true
+      # - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      # - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      # - AWS_REGION=${AWS_REGION}
+      WALG_COMPRESSION_METHOD: lz4
+      WALG_BACKUP_COMPRESSION_METHOD: lz4
+      WALG_UPLOAD_CONCURRENCY: 4
+      WALG_DOWNLOAD_CONCURRENCY: 4
+      WALG_DELTA_MAX_STEPS: 1
+      WALG_BACKUP_FROM_REPLICA: true
       WALG_FILE_PREFIX: "/backups/spilo"
     depends_on:
       - etcd
@@ -60,7 +71,18 @@ services:
       STANDBY_PORT: 5432
 
       # 本地存儲相關配置
-      USE_WALG_BACKUP: "true"
+      WAL_RESTORE_TIMEOUT: 0
+      USE_WALG_BACKUP: true
+      USE_WALG_RESTORE: true
+      # - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      # - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      # - AWS_REGION=${AWS_REGION}
+      WALG_COMPRESSION_METHOD: lz4
+      WALG_BACKUP_COMPRESSION_METHOD: lz4
+      WALG_UPLOAD_CONCURRENCY: 4
+      WALG_DOWNLOAD_CONCURRENCY: 4
+      WALG_DELTA_MAX_STEPS: 1
+      WALG_BACKUP_FROM_REPLICA: true
       WALG_FILE_PREFIX: "/backups/spilo"
     depends_on:
       - etcd
@@ -89,7 +111,18 @@ services:
       STANDBY_PORT: 5432
 
       # 本地存儲相關配置
-      USE_WALG_BACKUP: "true"
+      WAL_RESTORE_TIMEOUT: 0
+      USE_WALG_BACKUP: true
+      USE_WALG_RESTORE: true
+      # - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      # - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      # - AWS_REGION=${AWS_REGION}
+      WALG_COMPRESSION_METHOD: lz4
+      WALG_BACKUP_COMPRESSION_METHOD: lz4
+      WALG_UPLOAD_CONCURRENCY: 4
+      WALG_DOWNLOAD_CONCURRENCY: 4
+      WALG_DELTA_MAX_STEPS: 1
+      WALG_BACKUP_FROM_REPLICA: true
       WALG_FILE_PREFIX: "/backups/spilo"
     depends_on:
       - etcd
