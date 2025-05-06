@@ -17,6 +17,57 @@ services:
     volumes:
       - etcd-data:/etcd-data
 
+  redis-node1:
+    image: redis:7.2
+    container_name: redis-node1
+    command: redis-server --port 6379 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "6379:6379"
+      - "16379:16379"
+    networks:
+      - spilo-net
+    volumes:
+      - redis-node1-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  redis-node2:
+    image: redis:7.2
+    container_name: redis-node2
+    command: redis-server --port 6379 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "6380:6379"
+      - "16380:16379"
+    networks:
+      - spilo-net
+    volumes:
+      - redis-node2-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  redis-node3:
+    image: redis:7.2
+    container_name: redis-node3
+    command: redis-server --port 6379 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "6381:6379"
+      - "16381:16379"
+    networks:
+      - spilo-net
+    volumes:
+      - redis-node3-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
   spilo-node1:
     image: registry.opensource.zalan.do/acid/spilo-14:latest
     container_name: spilo-node1
@@ -181,6 +232,9 @@ volumes:
   spilo-data-node2:
   spilo-data-node3:
   pgadmin-data:
+  redis-node1-data:
+  redis-node2-data:
+  redis-node3-data:
 
 networks:
   spilo-net:
