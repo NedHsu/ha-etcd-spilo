@@ -89,6 +89,25 @@ services:
       timeout: 5s
       retries: 3
 
+  redis-init:
+    image: redis:7.2
+    container_name: redis-init
+    command: >
+      bash -c "
+        chmod +x /scripts/init-cluster-container.sh &&
+        /scripts/init-cluster-container.sh
+      "
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    networks:
+      - spilo-net
+    volumes:
+      - ./redis/init-cluster-container.sh:/scripts/init-cluster-container.sh
+    depends_on:
+      - redis-node1
+      - redis-node2
+      - redis-node3
+
   spilo-node1:
     image: registry.opensource.zalan.do/acid/spilo-14:latest
     container_name: spilo-node1

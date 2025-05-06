@@ -1,12 +1,22 @@
 #!/bin/bash
 
 # 檢測操作系統
-if [[ "$OSTYPE" == "darwin"* ]]; then
+if [[ "$OSTYPE" == "msys" ]]; then
+    # Windows with Git Bash
+    REDIS_CLI="redis-cli.exe"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS
     REDIS_CLI="redis-cli"
 else
     # Linux
     REDIS_CLI="redis-cli"
+fi
+
+# 檢查 redis-cli 是否可用
+if ! command -v $REDIS_CLI &> /dev/null; then
+    echo "Error: $REDIS_CLI is not installed or not in PATH"
+    echo "Please install Redis client tools first"
+    exit 1
 fi
 
 # 等待 Redis 節點就緒
