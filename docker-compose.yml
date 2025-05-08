@@ -144,7 +144,7 @@ services:
       - spilo-net
     volumes:
       - spilo-data-node1:/home/postgres/pgdata
-      - ./backups:/backups
+      - spilo-backups:/backups/spilo
 
   spilo-node2:
     image: registry.opensource.zalan.do/acid/spilo-14:latest
@@ -184,7 +184,7 @@ services:
       - spilo-net
     volumes:
       - spilo-data-node2:/home/postgres/pgdata
-      - ./backups:/backups
+      - spilo-backups:/backups/spilo
 
   spilo-node3:
     image: registry.opensource.zalan.do/acid/spilo-14:latest
@@ -224,7 +224,7 @@ services:
       - spilo-net
     volumes:
       - spilo-data-node3:/home/postgres/pgdata
-      - ./backups:/backups
+      - spilo-backups:/backups/spilo
 
   haproxy:
     image: haproxy:2.7
@@ -275,6 +275,7 @@ volumes:
   redis-node1-data:
   redis-node2-data:
   redis-node3-data:
+  spilo-backups:
 
 networks:
   spilo-net:
