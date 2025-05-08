@@ -95,14 +95,18 @@ services:
     command: >
       bash -c "
         chmod +x /scripts/init-cluster-container.sh &&
-        /scripts/init-cluster-container.sh
+        /scripts/init-cluster-container.sh &&
+        redis-server /etc/redis/redis.conf --port 6382
       "
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+    ports:
+      - "6382:6382"
     networks:
       - spilo-net
     volumes:
       - ./redis/init-cluster-container.sh:/scripts/init-cluster-container.sh
+      - ./redis/redis.conf:/etc/redis/redis.conf
     depends_on:
       - redis-node1
       - redis-node2
